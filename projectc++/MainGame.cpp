@@ -21,7 +21,7 @@ bool MainGame::AskYesNo(const string& prompt)
 }
 
 MainGame::MainGame()
-    : qHandler("questions.txt"),oldQHandler("quizzes.txt"),leaderBoard("leaderboard.txt")
+    : qHandler("C://Users/moaj23/Source/Repos/remopp/Cplusplus-project/projectc++/questions.txt"),oldQHandler("C://Users/moaj23/Source/Repos/remopp/Cplusplus-project/projectc++/quizzes.txt"),leaderBoard("C://Users/moaj23/Source/Repos/remopp/Cplusplus-project/projectc++/leaderboard.txt")
 {
     // Load questions from file at startup
     qHandler.ReadQuestionsFromFile();
@@ -41,31 +41,50 @@ void MainGame::Start()
 
         int choice;
         cin >> choice;
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
         if (choice == 1) {
+            system("cls");
             DebugListQuestions();
         }
         else if (choice == 2) {
+            system("cls");
             SelectQuiz();
         }
         else if (choice == 3) {
+            system("cls");
             LoadLeaderBoard();
         }
         else if (choice == 4) {
+            system("cls");
             CreateQuizRandom();
         }
         else if (choice == 5) {
+            system("cls");
             AddQuestion();
         }
-        else {
+        else if(choice == 6) {
             break;
+        }
+        else if (cin.fail()){
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            system("cls");
+            cout << "invalid input!!";
+        }
+        else
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            system("cls");
+            cout << "invalid input!!";
         }
     }
 }
 
 void MainGame::DebugListQuestions()
 {
+    //auto is used if the variable type is unknown
     const auto& allQ = qHandler.GetAllQuestions();
     if (allQ.empty()) {
         cout << "No questions loaded.\n";
@@ -128,8 +147,25 @@ void MainGame::CreateQuizRandom()
     // 1) Ask total number of questions
     cout << "How many total questions do you want in this quiz? ";
     int totalWanted;
-    cin >> totalWanted;
-    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    while (true)
+    {
+        cin >> totalWanted;
+        if(cin.fail() || totalWanted <= 0)
+        {
+            //clear error
+            cin.clear();
+            //Ignores invalid input
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "invalid input!!";
+
+        }
+        else
+        {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            break;
+        }
+    }
+
 
     // 2) Ask which types
     bool wantYesNo = AskYesNo("Include Yes/No questions? (yes/no): ");
@@ -183,26 +219,35 @@ void MainGame::CreateQuizRandom()
         cout << "No available questions for the selected types. Aborting.\n";
         return;
     }
+    //here the program warnes the user if there is no questions of a chosen type
     if (totalWanted < actualTypes) {
         cout << "You asked for " << totalWanted << " but have " << actualTypes << " chosen types (need at least 1 each). Aborting.\n";
         return;
     }
 
     // 4) Distribute
+
+    //if the user wants more questions than the amout of types that they chose then the program will distrebdute the leftover amount wanted randomly bitween the types
+    //for example user wants yesno questions and math questiosn and the amout of questions they want is 3 the program will chose one math and yesno question then the left over is 1 so the program will chose a random yesno or math question
     int leftover = totalWanted - actualTypes;
     int yesNoCount = 0, mathCount = 0, mcCount = 0;
+    //here is ensures that each question type selected gets atleast one questions
     if (hasYesNo) yesNoCount = 1;
     if (hasMath)  mathCount = 1;
     if (hasMC)    mcCount = 1;
 
-    default_random_engine rng(static_cast<unsigned>(std::time(nullptr)));
+    //create the random number generator with the time to generate the seed so its random every time the user makes a quiz
+    default_random_engine rng(static_cast<unsigned>(time(nullptr)));
     for (int i = 0; i < leftover; i++) {
+        
         vector<int> validSlots;
+        // here it addes all the posible types to the vector validSlots (0 = yesno, 1 = math, 2 = multiple choice)
         if (hasYesNo) validSlots.push_back(0);
         if (hasMath)  validSlots.push_back(1);
         if (hasMC)    validSlots.push_back(2);
 
         if (!validSlots.empty()) {
+            //here it randomly selects a type from the posible type from the validSlots vector and addes one to the number of questions from that type (so that type will have one more question of that type)
             uniform_int_distribution<int> dist(0, (int)validSlots.size() - 1);
             int chosenIndex = validSlots[dist(rng)];
             if (chosenIndex == 0) yesNoCount++;
@@ -211,15 +256,38 @@ void MainGame::CreateQuizRandom()
         }
     }
 
-    // Shuffle and pick
+    // here the code shuffles the questions pool
     shuffle(yesNoPool.begin(), yesNoPool.end(), rng);
     shuffle(mathPool.begin(), mathPool.end(), rng);
     shuffle(mcPool.begin(), mcPool.end(), rng);
 
+    //here the program prevents chosing more questions of a certin type than avalible
     if (yesNoCount > (int)yesNoPool.size()) yesNoCount = (int)yesNoPool.size();
     if (mathCount > (int)mathPool.size())  mathCount = (int)mathPool.size();
     if (mcCount > (int)mcPool.size())    mcCount = (int)mcPool.size();
+    
+    //here the code trise to substetut the missing questions from the code above with another question from a difrent chosen type
+    int totalSelected = yesNoCount + mathCount + mcCount;
+    while (totalSelected < totalWanted) {
+        if (hasYesNo && yesNoCount < (int)yesNoPool.size()) {
+            cout << "added extra yesno!!" << endl;
+            yesNoCount++;
+        }
+        else if (hasMath && mathCount < (int)mathPool.size()) {
+            cout << "added extra math!!" << endl;
+            mathCount++;
+        }
+        else if (hasMC && mcCount < (int)mcPool.size()) {
+            cout << "added extra MC!!" << endl;
+            mcCount++;
+        }
+        else {
+            break; // No more questions available
+        }
+        totalSelected = yesNoCount + mathCount + mcCount;
+    }
 
+    //here it just pushesback all the questions in to the total question pool of the quiz
     vector<int> selectedIDs;
     for (int i = 0; i < yesNoCount; i++) {
         selectedIDs.push_back(yesNoPool[i]->GetQuestionID());
@@ -237,12 +305,38 @@ void MainGame::CreateQuizRandom()
     }
 
     // 5) Prompt for quiz name, save
-    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     cout << "Enter a name for your new quiz: ";
     string quizName;
-    getline(std::cin, quizName);
+    bool validname = false;
+
+    while (!validname) {
+        getline(cin, quizName);
+
+        // Check if the name contains any invalid characters
+        bool hasInvalidChar = false;
+        for (char c : quizName) {
+            if (c == ' ' || c == ';') {
+                hasInvalidChar = true;
+                break;
+            }
+        }
+
+        if (hasInvalidChar) {
+            system("cls");
+            cout << "Invalid name for the quiz! Do not use spaces or ';' in the name. Please try again: ";
+        }
+        else if (quizName.empty()) {
+            system("cls");
+            cout << "Quiz name cannot be empty. Please try again: ";
+        }
+        else {
+            validname = true; // Name is valid
+        }
+    }
 
     oldQHandler.saveQuiz(quizName, selectedIDs);
+    system("cls");
     cout << "\nCreated quiz '" << quizName << "' with " << selectedIDs.size() << " question(s)!\n";
 }
 
@@ -311,9 +405,11 @@ void MainGame::AddQuestion()
 
     bool success = qHandler.AddNewQuestionAndSave(qType, questionText,choices, rightAnswer,pGain, pLose);
     if (success) {
+        system("cls");
         cout << "Question added successfully!\n";
     }
     else {
+        system("cls");
         cout << "Failed to add question.\n";
     }
 }
