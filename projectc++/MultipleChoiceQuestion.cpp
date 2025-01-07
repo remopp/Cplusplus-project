@@ -12,13 +12,25 @@ string MultipleChoiceQuestion::GetTypeName() const
 
 void MultipleChoiceQuestion::ShowQuestion()
 {
-    cout << "Q" << questionID << ": " << questionText << "\n";
-    for (int i = 0; i < choices.size(); ++i) {
-        cout << "  " << choices[i] << "\n";
-    }
+    cout << "input: A, B, C or D" << endl;
+    cout << "Q" << GetQuestionID() << ": " << GetQuestionText() << endl;
+    cout << "  A: " << choices[0] << endl;
+    cout << "  B: " << choices[1] << endl;
+    cout << "  C: " << choices[2] << endl;
+    cout << "  D: " << choices[3] << endl;
+
 }
 
 bool MultipleChoiceQuestion::ValidateAnswer(const std::string& userAnswer)
 {
-    return (userAnswer == rightAnswer);
+    
+    string lowerUserAnswer = userAnswer;
+    string lowerRightAnswer = rightAnswer;
+
+    // Convert both strings to lowercase
+    for (char& c : lowerUserAnswer) c = tolower(c);
+    for (char& c : lowerRightAnswer) c = tolower(c);
+
+    // Compare the lowercase strings
+    return (lowerUserAnswer == lowerRightAnswer);
 }
