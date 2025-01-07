@@ -92,17 +92,35 @@ void LeaderBoard::addPlayerEntry(const Player& player)
     writeAllRecords();
 }
 
-void LeaderBoard::DisplayLeaderBoard(const  string& quizName)
-{
+void LeaderBoard::DisplayLeaderBoard(const  string& quizName) {
     readAllRecords();
-    bool foundAny = false;
+
+    // Create a temporary vector to hold matching records
+     vector< pair< string, int>> results; // (playerName, score)
+
     for (size_t i = 0; i < playerNames.size(); i++) {
         if (quizNames[i] == quizName) {
-            foundAny = true;
-            cout << "Player: " << playerNames[i] << ", High Score: " << scores[i] << ", Quiz: " << quizNames[i] << "\n";
+            results.emplace_back(playerNames[i], scores[i]);
         }
     }
-    if (!foundAny) {
-        cout << "No scores found for quiz \"" << quizName << "\".\n";
+
+    if (results.empty()) {
+         cout << "No scores found for quiz \"" << quizName << "\".\n";
+        return;
+    }
+
+    // Manual sorting (Selection Sort - Descending Order)
+    for (size_t i = 0; i < results.size(); ++i) {
+        for (size_t j = i + 1; j < results.size(); ++j) {
+            if (results[j].second > results[i].second) {
+                 swap(results[i], results[j]);
+            }
+        }
+    }
+
+    // Display the sorted leaderboard
+     cout << "Leaderboard for quiz \"" << quizName << "\":\n";
+    for (const auto& entry : results) {
+         cout << "Player: " << entry.first << ", High Score: " << entry.second << "\n";
     }
 }
