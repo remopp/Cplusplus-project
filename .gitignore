@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/projectc++/quizzes.txt
+/projectc++/leaderboard.txt
+/projectc++/questions.txt

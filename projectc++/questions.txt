@@ -1,3 +1,0 @@
-0;H;is khaled table?;yes;10;5
-1;M;what is the squareroot of 9?;3;20;4
-2;O;what is the part of the computer that handles visuals?;cpu;motherboard;gpu;ram;c;30;40
