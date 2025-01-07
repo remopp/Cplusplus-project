@@ -5,7 +5,7 @@
 using namespace std;
 
 class Question {
-protected:
+private:
     int questionID;
     string questionText;
     int pointsToGain;
