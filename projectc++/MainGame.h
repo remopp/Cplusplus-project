@@ -6,7 +6,7 @@
 #include "LeaderBoard.h"
 #include "Quiz.h"
 #include <random>
-
+#include <cstdlib>
 class MainGame {
 private:
     quizhandler qHandler;
