@@ -21,11 +21,7 @@ public:
     LeaderBoard(const string& fname = "leaderboard.txt");
     void addPlayerEntry(const Player& player);
     void DisplayLeaderBoard(const string& quizName);
-
 };
-
-
-
 
 
 #endif // !LEADERBOARD_H

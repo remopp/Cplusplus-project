@@ -21,7 +21,7 @@ void MultipleChoiceQuestion::ShowQuestion()
 
 }
 
-bool MultipleChoiceQuestion::ValidateAnswer(const std::string& userAnswer)
+bool MultipleChoiceQuestion::ValidateAnswer(const string& userAnswer)
 {
     
     string lowerUserAnswer = userAnswer;

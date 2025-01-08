@@ -3,10 +3,10 @@
 #include "Question.h"
 #include "player.h"
 #include <vector>
-
+using namespace std;
 class Quiz {
 private:
-    std::vector<Question*> Questions;
+    vector<Question*> Questions;
     Player player;
     int points;
 

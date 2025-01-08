@@ -11,15 +11,8 @@ public:
     virtual ~MathQuestion();
     string GetTypeName() const override;
 
-    bool ValidateAnswer(const std::string& userAnswer) override;
+    bool ValidateAnswer(const string& userAnswer) override;
 };
-
-
-
-
-
-
-
 
 #endif // !MATHQUESTION_H
 

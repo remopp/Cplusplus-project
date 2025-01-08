@@ -7,11 +7,11 @@ private:
     string correctAnswer;
 
 public:
-    YesNoQuestion(int qID, const string& qText, int pGain, int pLose, const std::string& rAns);
+    YesNoQuestion(int qID, const string& qText, int pGain, int pLose, const string& rAns);
 
     string GetTypeName() const override;
 
-    bool ValidateAnswer(const std::string& userAnswer) override;
+    bool ValidateAnswer(const string& userAnswer) override;
 };
 
 #endif 

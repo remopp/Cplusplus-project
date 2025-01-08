@@ -15,7 +15,7 @@ private:
 
     // Helper to read "yes/no" from user
     bool AskYesNo(const string& prompt);
-
+    string validateinput(bool wantspace);
 public:
     MainGame();
 

@@ -20,8 +20,48 @@ bool MainGame::AskYesNo(const string& prompt)
     }
 }
 
+string MainGame::validateinput(bool wantspace)
+{
+    string input;
+    bool validname = false;
+
+    while (!validname) {
+        getline(cin, input);
+
+        // Check if the name contains any invalid characters
+        bool hasInvalidChar = false;
+        for (char c : input) {
+            
+            if (c == ';') {
+                hasInvalidChar = true;
+                break;
+            }
+            if(wantspace == false && c == ' ')
+            {
+                hasInvalidChar = true;
+                break;
+            }
+        }
+
+        if (hasInvalidChar) {
+            system("cls");
+            cout << "incvalid input!!";
+            if (!wantspace) { cout << "Do not input a space , ';' Please try again: "; }
+            else {cout << "Do not input ';' Please try again: ";}
+        }
+        else if (input.empty()) {
+            system("cls");
+            cout << "input cannot be empty. Please try again: ";
+        }
+        else {
+            validname = true; // Name is valid
+        }
+    }
+    return input;
+}
+
 MainGame::MainGame()
-    : qHandler("C://Users/moaj23/Source/Repos/remopp/Cplusplus-project/projectc++/questions.txt"),oldQHandler("C://Users/moaj23/Source/Repos/remopp/Cplusplus-project/projectc++/quizzes.txt"),leaderBoard("C://Users/moaj23/Source/Repos/remopp/Cplusplus-project/projectc++/leaderboard.txt")
+    : qHandler("C://Users/MMMJ/source/repos/remopp/Cplusplus-project/projectc++/questions.txt"),oldQHandler("C://Users/MMMJ/source/repos/remopp/Cplusplus-project/projectc++/quizzes.txt"),leaderBoard("C://Users/MMMJ/source/repos/remopp/Cplusplus-project/projectc++/leaderboard.txt")
 {
     // Load questions from file at startup
     qHandler.ReadQuestionsFromFile();
@@ -307,110 +347,133 @@ void MainGame::CreateQuizRandom()
     // 5) Prompt for quiz name, save
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
     cout << "Enter a name for your new quiz: ";
-    string quizName;
-    bool validname = false;
-
-    while (!validname) {
-        getline(cin, quizName);
-
-        // Check if the name contains any invalid characters
-        bool hasInvalidChar = false;
-        for (char c : quizName) {
-            if (c == ' ' || c == ';') {
-                hasInvalidChar = true;
-                break;
-            }
-        }
-
-        if (hasInvalidChar) {
-            system("cls");
-            cout << "Invalid name for the quiz! Do not use spaces or ';' in the name. Please try again: ";
-        }
-        else if (quizName.empty()) {
-            system("cls");
-            cout << "Quiz name cannot be empty. Please try again: ";
-        }
-        else {
-            validname = true; // Name is valid
-        }
-    }
+    string quizName = validateinput(false);
 
     oldQHandler.saveQuiz(quizName, selectedIDs);
     system("cls");
     cout << "\nCreated quiz '" << quizName << "' with " << selectedIDs.size() << " question(s)!\n";
 }
-
-void MainGame::AddQuestion()
-{
-    cout << "\n=== Add a New Question to the Question Pool ===\n";
-    cout << "Select question type:\n";
-    cout << "  1) Yes/No\n";
-    cout << "  2) Math\n";
-    cout << "  3) Multiple Choice\n";
+void MainGame::AddQuestion() {
     int typeChoice;
-    cin >> typeChoice;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-    char qType;
-    if (typeChoice == 1) qType = 'H';   // yes/no
-    else if (typeChoice == 2) qType = 'M'; // math
-    else if (typeChoice == 3) qType = 'O'; // multiple choice
-    else {
-        cout << "Invalid type.\n";
-        return;
+    // Prompt for question type
+    while (true) {
+        cout << "\n=== Add a New Question to the Question Pool ===\n";
+        cout << "Select question type:\n";
+        cout << "  1) Yes/No\n";
+        cout << "  2) Math\n";
+        cout << "  3) Multiple Choice\n";
+        cout << "Input: ";
+
+        string typeInput = validateinput(false); // Validate input without spaces
+        if (typeInput == "1" || typeInput == "2" || typeInput == "3") {
+            typeChoice = stoi(typeInput); // Convert valid input to integer
+            break;
+        }
+        else {
+            system("cls");
+            cout << "Invalid input! Please enter 1, 2, or 3.\n";
+        }
     }
 
-    cout << "Enter the question text: ";
-    string questionText;
-    getline(cin, questionText);
+    char qType;
+    if (typeChoice == 1) qType = 'H';   // Yes/No
+    else if (typeChoice == 2) qType = 'M'; // Math
+    else if (typeChoice == 3) qType = 'O'; // Multiple Choice
 
-    vector<string> choices;  // only used if multiple choice
+    cout << "Input the question: ";
+    string questionText = validateinput(true); // Allow spaces in the question text
+
+    vector<string> choices; // Used only for multiple-choice questions
     string rightAnswer;
 
     if (qType == 'O') {
-        // multiple choice => prompt for 4 lines
+        // Multiple choice: prompt for options A, B, C, D
         choices.resize(4);
-        cout << "Enter option A (e.g. A,santa): ";
-        getline(cin, choices[0]);
+        cout << "Enter option A: ";
+        choices[0] = validateinput(true);
         cout << "Enter option B: ";
-        getline(cin, choices[1]);
+        choices[1] = validateinput(true);
         cout << "Enter option C: ";
-        getline(cin, choices[2]);
+        choices[2] = validateinput(true);
         cout << "Enter option D: ";
-        getline(cin, choices[3]);
+        choices[3] = validateinput(true);
 
         cout << "Which option is correct? (A/B/C/D): ";
-        getline(cin, rightAnswer);
+        while (true){
+            rightAnswer = validateinput(false); // No spaces allowed for the answer
+            if (rightAnswer != "a" && rightAnswer != "A" && rightAnswer != "b" && rightAnswer != "B" && rightAnswer != "c" && rightAnswer != "C" && rightAnswer != "d" && rightAnswer != "D")
+            {
+                system("cls");
+                cout << rightAnswer << endl;
+                cout << "invalid input!! input (A , B , C or D)";
+            }
+            else
+            {
+                break;
+            }
+        }
     }
     else if (qType == 'M') {
-        // math => single right answer (string/number)
+        // Math question: single correct answer
         cout << "Enter the correct numeric/string answer: ";
-        getline(cin, rightAnswer);
+        rightAnswer = validateinput(true);
     }
     else if (qType == 'H') {
-        // yes/no => e.g. "yes" or "no"
-        cout << "Enter the correct answer (yes/no): ";
-        getline(cin, rightAnswer);
+        // Yes/No question
+        bool yesOrNo = AskYesNo("Enter the correct answer (yes/no): ");
+        if(yesOrNo)
+        {
+            rightAnswer = "Yes";
+        }
+        else
+        {
+            rightAnswer = "No";
+        }
+
+    }
+    int pGain;
+    while (true) {
+        cout << "Points to GAIN if correct: ";
+        cin >> pGain;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
+        if (cin.fail() || pGain < 0) {
+            cin.clear(); // Clear the error state
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Flush invalid input
+            system("cls");
+            cout << "Invalid input! Points to gain must be a non-negative number.\n";
+        }
+        else {
+            break;
+        }
     }
 
-    cout << "Points to GAIN if correct: ";
-    int pGain;
-    cin >> pGain;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-    cout << "Points to LOSE if incorrect: ";
     int pLose;
-    cin >> pLose;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    while (true) {
+        cout << "Points to LOSE if incorrect: ";
+        cin >> pLose;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
+        if (cin.fail() || pLose < 0) {
+            cin.clear(); // Clear the error state
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Flush invalid input
+            system("cls");
+            cout << "Invalid input! Points to Lose must be a non-negative number.\n";
+        }
+        else {
+            break;
+        }
+    }
 
-    bool success = qHandler.AddNewQuestionAndSave(qType, questionText,choices, rightAnswer,pGain, pLose);
+    // Add the question to the pool and save it
+    bool success = qHandler.AddNewQuestionAndSave(qType, questionText, choices, rightAnswer, pGain, pLose);
     if (success) {
         system("cls");
         cout << "Question added successfully!\n";
     }
     else {
         system("cls");
-        cout << "Failed to add question.\n";
+        cout << "Failed to add the question.\n";
     }
 }
+
 

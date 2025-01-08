@@ -11,10 +11,10 @@ private:
     string filename;
     vector<Question*> allQuestions;
     int maxQuestionID = -1; 
-
+    vector<string> split(const string& str, char delimiter);
 public:
 
-    vector<string> split(const string& str, char delimiter);
+    
 
     quizhandler(const string& fname = "questions.txt");
 

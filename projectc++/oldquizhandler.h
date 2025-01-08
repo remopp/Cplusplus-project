@@ -9,12 +9,10 @@ using namespace std;
 class oldquizhandler {
 private:
     string filename;
-
+    vector<string> split(const string& str, char delimiter);
 public:
 
     oldquizhandler(const string& fname = "quizzes.txt");
-
-    vector<string> split(const string& str, char delimiter);
 
     void saveQuiz(const string& quizName, const vector<int>& questionIDs);
     // Example line: "MyQuiz 0 1 2" => returns [0,1,2]
