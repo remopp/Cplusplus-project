@@ -9,6 +9,12 @@ MathQuestion::~MathQuestion()
 {
 }
 
+void MathQuestion::ShowQuestion()
+{
+    cout << Question::GetQuestionText() << endl;
+    cout << "enter your answer: " << endl;
+}
+
 string MathQuestion::GetTypeName() const
 {
     return "Math";

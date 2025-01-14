@@ -16,9 +16,6 @@ public:
     string GetName() const;
     string GetQuizName() const;
     int GetScore() const;
-
-    void SetName(const string& newName);
-    void SetQuizName(const string& newQuizName);
     void SetScore(int newScore);
 };
 #endif // !PLAYER_H

@@ -24,16 +24,6 @@ int Player::GetScore() const
     return score;
 }
 
-void Player::SetName(const string& newName)
-{
-    this->name = newName;
-}
-
-void Player::SetQuizName(const string& newQuizName)
-{
-    this->quizName = newQuizName;
-}
-
 void Player::SetScore(int newScore)
 {
     this->score = newScore;

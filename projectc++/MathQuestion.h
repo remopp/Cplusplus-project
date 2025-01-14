@@ -10,7 +10,7 @@ public:
     MathQuestion(int qID,const string& qText, int pGain,int pLose,const string& rAns);
     virtual ~MathQuestion();
     string GetTypeName() const override;
-
+    virtual void ShowQuestion() override;
     bool ValidateAnswer(const string& userAnswer) override;
 };
 

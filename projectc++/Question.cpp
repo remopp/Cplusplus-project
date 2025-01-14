@@ -29,8 +29,4 @@ int Question::GetPointsToLose() const
     return pointsToLose;
 }
 
-void Question::ShowQuestion()
-{
-    cout << "Q" << questionID << ": " << questionText << endl;
-}
 

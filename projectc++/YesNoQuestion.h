@@ -8,9 +8,10 @@ private:
 
 public:
     YesNoQuestion(int qID, const string& qText, int pGain, int pLose, const string& rAns);
+    virtual ~YesNoQuestion();
 
     string GetTypeName() const override;
-
+    virtual void ShowQuestion() override;
     bool ValidateAnswer(const string& userAnswer) override;
 };
 

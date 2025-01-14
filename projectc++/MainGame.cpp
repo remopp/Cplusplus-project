@@ -61,7 +61,7 @@ string MainGame::validateinput(bool wantspace)
 }
 
 MainGame::MainGame()
-    : qHandler("C://Users/MMMJ/source/repos/remopp/Cplusplus-project/projectc++/questions.txt"),oldQHandler("C://Users/MMMJ/source/repos/remopp/Cplusplus-project/projectc++/quizzes.txt"),leaderBoard("C://Users/MMMJ/source/repos/remopp/Cplusplus-project/projectc++/leaderboard.txt")
+    : qHandler("C://Users/moaj23/source/repos/remopp/Cplusplus-project/projectc++/questions.txt"),oldQHandler("C://Users/moaj23/source/repos/remopp/Cplusplus-project/projectc++/quizzes.txt"),leaderBoard("C://Users/moaj23/source/repos/remopp/Cplusplus-project/projectc++/leaderboard.txt")
 {
     // Load questions from file at startup
     qHandler.ReadQuestionsFromFile();
@@ -153,10 +153,9 @@ void MainGame::SelectQuiz()
     Quiz quiz;
     cout << "Enter your name: ";
     string playerName;
-    getline(std::cin, playerName);
+    getline(cin, playerName);
 
     Player p(playerName, quizName);
-    quiz.SetPlayer(p);
 
     vector<Question*> chosenQuestions;
     for (int id : questionIDs) {
@@ -169,7 +168,6 @@ void MainGame::SelectQuiz()
         }
     }
     quiz.SetQuestions(chosenQuestions);
-
     int finalScore = quiz.RunQuestions();
     cout << "Your final score is: " << finalScore << "\n";
 

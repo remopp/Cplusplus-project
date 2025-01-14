@@ -5,10 +5,6 @@ Quiz::Quiz()
 {
 }
 
-void Quiz::SetPlayer(const Player& p)
-{
-    player = p;
-}
 
 void Quiz::SetQuestions(const vector<Question*>& qs)
 {
@@ -20,6 +16,7 @@ int Quiz::RunQuestions()
     points = 0;
     for (size_t i = 0; i < Questions.size(); ++i) {
         Question* q = Questions[i];
+        cout << "question " << i+1 << " :";
         q->ShowQuestion();
 
         string userAnswer;
@@ -35,14 +32,16 @@ int Quiz::RunQuestions()
             cout << "Wrong! -" << q->GetPointsToLose() << " points\n";
         }
         cout << "Current points: " << points << "\n\n";
+        
+        if (i < Questions.size() - 1) {
+            cout << "Press Enter to continue to the next question...";
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Wait for Enter
+            system("cls"); // Clear the terminal
+        }
     }
     return points;
 }
 
-int Quiz::GetFinalScore() const
-{
-    return points;
-}
 
 
 

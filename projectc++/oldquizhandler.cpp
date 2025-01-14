@@ -74,6 +74,4 @@ void oldquizhandler::DisplayQuizNames()
 		cout << parts[0] << endl;
 	}
 	in.close();
-
-
 }

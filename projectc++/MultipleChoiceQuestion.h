@@ -11,7 +11,7 @@ private:
 
 public:
     MultipleChoiceQuestion(int qID,const string& qText,int pGain,int pLose,const vector<string>& ch,const string& rAns);
-
+    virtual ~MultipleChoiceQuestion();
     string GetTypeName() const override;
 
     void ShowQuestion() override;

@@ -120,7 +120,20 @@ void LeaderBoard::DisplayLeaderBoard(const  string& quizName) {
 
     // Display the sorted leaderboard
      cout << "Leaderboard for quiz \"" << quizName << "\":\n";
-    for (const auto& entry : results) {
-         cout << "Player: " << entry.first << ", High Score: " << entry.second << "\n";
-    }
+     if(results.size() >= 10)
+     {
+         for (size_t i = 0; i < 10; i++)
+         {
+             cout << "Player: " << results[i].first << ", High Score: " << results[i].second << "\n";
+         }
+     }
+     else
+     {
+         for (size_t i = 0; i < results.size(); i++)
+         {
+             cout << "Player: " << results[i].first << ", High Score: " << results[i].second << "\n";
+         }
+     }
+ 
+
 }

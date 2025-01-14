@@ -23,7 +23,7 @@ public:
 
     virtual string GetTypeName() const = 0;
 
-    virtual void ShowQuestion();
+    virtual void ShowQuestion() = 0;
 
     virtual bool ValidateAnswer(const string& userAnswer) = 0;
 };
