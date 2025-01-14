@@ -17,6 +17,7 @@ public:
     void saveQuiz(const string& quizName, const vector<int>& questionIDs);
     // Example line: "MyQuiz 0 1 2" => returns [0,1,2]
     vector<int> getQuestionIDs(const  string& quizName);
+    void DisplayQuizNames();
 };
 
 

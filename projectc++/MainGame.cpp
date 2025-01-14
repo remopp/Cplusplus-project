@@ -137,6 +137,9 @@ void MainGame::DebugListQuestions()
 
 void MainGame::SelectQuiz()
 {
+
+    cout << "===== Select a Quiz =====\n";
+    oldQHandler.DisplayQuizNames();
     cout << "Enter quiz name: ";
     string quizName;
     getline(std::cin, quizName);
@@ -347,8 +350,20 @@ void MainGame::CreateQuizRandom()
     // 5) Prompt for quiz name, save
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
     cout << "Enter a name for your new quiz: ";
-    string quizName = validateinput(false);
+    string quizName = validateinput(true);
+    while (true)
+    {
+        if(oldQHandler.getQuestionIDs(quizName).empty())
+        {
+        	break;
+		}
+		else
+		{
+			cout << "Quiz name already exists!! Please enter a new name: ";
+            quizName = validateinput(true);
+        }
 
+    }
     oldQHandler.saveQuiz(quizName, selectedIDs);
     system("cls");
     cout << "\nCreated quiz '" << quizName << "' with " << selectedIDs.size() << " question(s)!\n";

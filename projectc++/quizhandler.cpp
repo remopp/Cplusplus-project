@@ -16,6 +16,7 @@ quizhandler::quizhandler(const string& fname)
 {
 }
 
+//dynamic memory allocation
 quizhandler::~quizhandler()
 {
     for (size_t i = 0; i < allQuestions.size(); ++i) {

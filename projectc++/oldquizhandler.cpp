@@ -56,3 +56,24 @@ vector<int> oldquizhandler::getQuestionIDs(const string& quizName)
     in.close();
     return result;
 }
+
+void oldquizhandler::DisplayQuizNames()
+{
+    ifstream in(filename);
+    if (!in.is_open()) {
+	cerr << "Could not open " << filename << " to read quiz definitions.\n";
+	return;
+	}
+	string line;
+    while (getline(in, line)) {
+        //To make sure that the line is not empty
+		if (line.empty()) continue;
+		vector<string> parts = split(line, ' ');
+        //to make sure that the quiz is not empty
+		if (parts.size() < 2) continue;
+		cout << parts[0] << endl;
+	}
+	in.close();
+
+
+}
